@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="icon" href="./img/mdcon.ico">
+    <title>Seoul Art Center</title>
+    <style>
+
+        h1 {
+            color:#ffffff;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .table-container{
+            max-width: 850px;
+            margin: 0 auto;
+        }
+        .board-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .board-table th, .board-table td {
+            padding: 8px;
+            text-align: center;
+        }
+
+        .board-table th {
+            /* background-color: #f4f4f4; */
+            font-weight: bold;
+        }
+
+        .board-table th:nth-child(2),
+        .board-table td:nth-child(2) {
+            width: 40%; /* 제목 칸의 너비를 전체 테이블의 50%로 설정 */
+        }
+
+        /* 
+        .board-table tbody tr:nth-child(even) {
+            background-color: #6d6d6d;
+        } 
+        */
+
+        .board-table tbody tr:hover {
+            background-color: #333;
+        }
+
+        .board-table a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .board-table a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo" style="zoom: 0.8"><a href="index.html"><img src="./img/logo.png" style="width:35px;height:35px;">&nbsp;예술의 전당</a></div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="program.html">Program</a></li>
+                <li><a href="board.html">Notice</a></li>
+                <li><a href="location.html">Location</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="nes-field is-inline search-bar">
+            <input type="text" id="name_field" class="nes-input" placeholder="검색" style="zoom: 0.8">
+            <span class="text-color-black">
+                <a class="nes-btn" style="zoom: 0.7">검색</a>
+            </span>
+        </div>
+    </header>
+
+    <main>
+        <div class="table-container">
+            <h1>전당 소식</h1>
+            <table class="board-table nes-table is-bordered is-centered is-dark">
+                <thead>
+                    <tr>
+                        <th>no</th>
+                        <th>title</th>
+                        <th>date</th>
+                        <th>view</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>5</td>
+                        <td><a href="#">'기울기 기울이기' 전 촉감 감상 참가자 모집</a></td>
+                        <td>2024-09-01</td>
+                        <td>15</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><a href="#">음악당 대관일정 안내</a></td>
+                        <td>2024-09-01</td>
+                        <td>15</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><a href="#">인터파크티켓 예매방법 일부 변경 안내</a></td>
+                        <td>2024-09-01</td>
+                        <td>15</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><a href="#">어린이라운지 돌봄서비스 사전예약 안내</a></td>
+                        <td>2024-08-31</td>
+                        <td>23</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td><a href="#">공연영상플랫폼 ‘DIGITAL STAGE’로 예술의전당 공연을 감상하세요</a></td>
+                        <td>2024-08-30</td>
+                        <td>42</td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- <div class="button-container">
+                <button type="button" class="nes-btn is-primary">글쓰기</button>
+            </div> -->
+        </div>
+
+
+    </main>
+
+    <footer id="contact">
+        <p><i class="nes-icon is-small heart"></i>Contact Info<i class="nes-icon is-small heart"></i></p>
+        <a href="https://github.com/2mandoo"><i class="nes-icon github is-small"></i></a>
+        <p><i class="nes-icon google is-small"></i> dlwjdgus7441@gmail.com | <i class="nes-phone" style="zoom: 0.15;"></i> 010 9255 7441</p>
+    </footer>
+</body>
+</html>

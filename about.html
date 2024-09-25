@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/calendarIcon.css"> <!-- 추가 2024-09-24-->
+    <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./css/style.css">
+    <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <link rel="icon" href="./img/mdcon.ico">
+    <title>Seoul Art Center</title>
+    <style>
+        .background-image {
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.555), rgba(0, 0, 0, 0.555)), 
+                url('./img/piano.webp'); 
+            background-size: cover; /* 배경 이미지를 요소에 꽉 차게 조정 */
+            background-position: center; /* 이미지를 중앙에 위치 */
+            background-repeat: no-repeat; /* 배경 이미지가 반복되지 않도록 설정 */
+            height: 100vh; /* 뷰포트 높이에 맞추기 위해 100vh 설정 */
+            width: 100%; /* 요소의 너비를 100%로 설정 */
+        }
+
+        #container-wrap {
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            display: flex;
+            width: 80%;
+        }
+
+        .pro-info-section {
+            flex-basis: 60%;
+            padding: 20px;
+            color:rgb(227, 227, 227);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* 이미지와 정보가 상단에 맞춰 정렬되도록 */
+            align-items: center; 
+        }
+
+        #poster {
+            width:300px;
+            height: 420px;
+            margin-bottom: 30px; 
+        }
+
+        .pro-info-section p {
+            margin-bottom: 3px;
+            font-size: 1.1rem;
+        }
+
+        .age-info-section {
+            flex-basis: 40%;
+            display: flex;
+            justify-content: center; /* 세로 가운데 정렬 flex-start; */
+            align-items: center; /* 가로 가운데 정렬 */
+            flex-direction: column;
+        }
+
+
+        #info {
+            /* padding-left: 40px; */
+            display: flex;
+            flex-direction: column;
+            gap: 10px; /* 간격 추가 */
+        }
+
+        #info p,h3 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 3px 0;
+        }
+
+        #info p span:before {
+            content: "|"; /* '|' 기호 추가 */
+            margin-right: 5px;
+            color: #888; /* | 기호 색상 */
+        }
+
+        /* 왼쪽 요소 정렬 */
+        #info strong {
+            width: 85px; /* 모든 strong 요소의 고정된 너비 */
+            text-align: left; /* 왼쪽 정렬 */
+        }
+
+        /* 오른쪽 요소 정렬 */
+        #info span {
+            flex-grow: 1;
+            text-align: left; /* 왼쪽 정렬 */
+            padding-left: 5px;
+        }
+
+        #chartTitle{
+            color: rgb(227, 227, 227);
+            font-size: 1.1rem;
+            margin-bottom:15px;
+        }
+
+        </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo" style="zoom: 0.8"><a href="index.html"><img src="./img/logo.png" style="width:35px;height:35px;">&nbsp;예술의 전당</a></div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="program.html">Program</a></li>
+                <li><a href="board.html">Notice</a></li>
+                <li><a href="location.html">Location</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="nes-field is-inline search-bar">
+            <input type="text" id="name_field" class="nes-input" placeholder="검색" style="zoom: 0.8">
+            <span class="text-color-black">
+                <a class="nes-btn" style="zoom: 0.7">검색</a>
+            </span>
+        </div>
+    </header>
+
+    <main class="background-image">
+        <div id="container-wrap">
+        <div class="container">
+
+            <!-- 왼쪽: 프로그램 정보 -->
+            <div class="pro-info-section">
+                <img id="poster" src="" alt="Concert Poster">
+                <div id="info">
+                    <h3 id="title"></h3>
+                    <p><strong>기간
+                        <img id="calendarIcon" src="img/naver_calendar_icon.png" alt="Add Event"
+                        style="width: 40px; height:40px" onclick="addCalendarEvent()">
+                        </strong><span id="period"></span>
+                    </p>
+                    <p><strong>시간</strong><span id="event_period"></span></p>
+                    <p><strong>입장연령</strong><span id="audience"></span></p>
+                    <p><strong>가격</strong><span id="charge"></span></p>
+                    <p><strong>문의</strong><span id="contact"></span></p>
+                    <p><strong>주최</strong><span id="contributor"></span></p>
+                </div>
+                
+            </div>
+            
+            <!-- 오른쪽: 예매 연령 정보 -->
+            <div class="age-info-section">
+                <div id="chartTitle">나이대 별 예매 현황</div>
+                <div id="charts-container"></div>
+            </div>
+        </div>
+    </div>
+
+    </main>
+
+    <footer id="contact">
+        <p><i class="nes-icon is-small heart"></i>Contact Info<i class="nes-icon is-small heart"></i></p>
+        <a href="https://github.com/2mandoo"><i class="nes-icon github is-small"></i></a>
+        <p><i class="nes-icon google is-small"></i> dlwjdgus7441@gmail.com | <i class="nes-phone" style="zoom: 0.15;"></i> 010 9255 7441</p>
+    </footer>
+
+    <script>
+        const data = JSON.parse(decodeURIComponent(window.location.hash.slice(1)));
+
+        // localStorage에서 값 가져오기 (문자열)
+        const item = localStorage.getItem(data.key);
+
+        // 문자열을 다시 객체로 변환
+        const parsedData = JSON.parse(item);
+        
+        // 도넛 차트 그리기
+        drawDoughnutChart(parsedData);
+
+        $("#title").html(parsedData.TITLE);
+        $("#period").html(parsedData.PERIOD);
+        $("#event_period").html(parsedData.EVENT_PERIOD);
+        $("#audience").html(parsedData.AUDIENCE);
+        $("#charge").html(parsedData.CHARGE);
+        $("#contact").html(parsedData.CONTACT_POINT);
+        $("#contributor").html(parsedData.CONTRIBUTOR);
+        $("#poster").attr("src", parsedData.IMAGE_OBJECT);
+
+        // 차트 그리는 함수
+        function drawDoughnutChart(data) {
+            const canvas = document.createElement('canvas');
+            document.getElementById('charts-container').appendChild(canvas);
+            const ctx = canvas.getContext('2d');
+
+            const ageGroups = Object.keys(data.RELATION).filter(key => data.RELATION[key] > 0); // 0인 값 필터링
+            const counts = ageGroups.map(group => data.RELATION[group]); //ageGroups 요소를 순회하면서 해당 연령대의 값 가져옴
+
+            const colors = [
+                'rgba(153, 102, 255, 0.8)', // #9966FF
+                'rgba(231, 110, 85, 0.8)',  // #e76e55
+                'rgba(228, 148, 0, 0.8)',    // #e59400
+                'rgba(247, 213, 29, 0.8)',   // #f7d51d
+                'rgba(146, 204, 65, 0.8)',   // #92cc41
+                'rgba(32, 156, 238, 0.8)',   // #209cee
+                'rgba(75, 192, 192, 0.8)'    // #4BC0C0
+            ];
+
+            const doughnutChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ageGroups,
+                    datasets: [{
+                        //label: data.TITLE,
+                        data: counts,
+                        backgroundColor: colors,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    //maintainAspectRatio: false, // 비율 유지 안함
+                    plugins: {
+                        //범례
+                        legend: {
+                            //display: false,
+                            position: 'bottom',
+                            labels: {
+                                padding: 10, // 범례 항목 간격 조정
+                            }
+                        },
+                        title: {
+                            display: false,
+                            text: `도넛 차트: ${data.TITLE}`
+                        },
+                        //레이블
+                        datalabels: {
+                            color: '#fff',
+                            formatter: (value, context) => {
+                                return value > 0 ? `${context.chart.data.labels[context.dataIndex]}: ${value}` : '';
+                            },
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels] // 데이터 레이블 플러그인 추가
+            });
+            // 차트 크기 조정
+            canvas.style.width = '400px';  // 너비 설정
+            canvas.style.height = '400px'; // 높이 설정
+        }
+
+        
+        // 포스터 클릭, 예매 페이지 이동
+        $('#poster').on('click', function() {
+            window.location.href = parsedData.URL;
+        });
+
+    </script>
+    <!-- 추가 2024-09-24-->
+    <script src="js/naverCalender.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
+    <!-- Link Swiper's CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/swiper.css">
+    <link rel="icon" href="./img/mdcon.ico">
+    <title>Seoul Art Center</title>
+    <style>
+        #sns{
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo" style="zoom: 0.8"><a href="index.html"><img src="./img/logo.png" style="width:35px;height:35px;">&nbsp;예술의 전당</a></div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="program.html">Program</a></li>
+                <li><a href="board.html">Notice</a></li>
+                <li><a href="location.html">Location</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="nes-field is-inline search-bar">
+            <input type="text" id="name_field" class="nes-input" placeholder="검색" style="zoom: 0.8">
+            <span class="text-color-black">
+                <a class="nes-btn" style="zoom: 0.7">검색</a>
+            </span>
+        </div>
+    </header>
+
+    <main>
+        <!-- Swiper -->
+        <div class="swiper mySwiper">
+            <div class="swiper-wrapper" id="swiper-wrapper"></div>
+
+            <div class="swiper-pagination"></div>
+        </div>
+
+        <!-- sns 연결 -->
+        <div id="sns">
+            <h2>Enjoy SAC with</h2>
+            <a href="https://www.facebook.com/SeoulArtsCenter.Korea" target="_blank"><i class="nes-icon facebook is-medium" style="zoom:0.7"></i></a>
+            <a href="https://www.instagram.com/seoul_arts_center/" target="_blank"><i class="nes-icon instagram is-medium" style="zoom:0.7"></i></a>
+            <a href="https://www.youtube.com/channel/UCUn8h6aG6rCM1zvXKIuNpVQ" target="_blank"><i class="nes-icon youtube is-medium" style="zoom:0.7"></i></a>
+        </div>
+    </main>
+
+    <footer id="contact">
+        <p><i class="nes-icon is-small heart"></i>Contact Info<i class="nes-icon is-small heart"></i></p>
+        <a href="https://github.com/2mandoo"><i class="nes-icon github is-small"></i></a>
+        <p><i class="nes-icon google is-small"></i> dlwjdgus7441@gmail.com | <i class="nes-phone" style="zoom: 0.15;"></i> 010 9255 7441</p>
+    </footer>
+
+    <script>
+        async function fetchDataAndStoreData() {
+            await fetch('./data/data_50.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                let pk = 0;
+                console.log(data); // JSON 데이터 처리
+                data.forEach(item => {
+                    pk++;
+                    // 객체를 문자열로 변환하여 저장
+                    localStorage.setItem('md'+pk, JSON.stringify(item));
+                    console.log("fetchDataAndStoreData: ",pk);
+                });
+                
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+            console.log("fetchDataAndStoreData")
+        }
+
+        function createSwiper(){
+            for(var i=1; i<=10; i++){
+                const key ='md'+i;
+                const item = localStorage.getItem(key);
+                const parsedData = JSON.parse(item);
+                const imageUrl = parsedData.IMAGE_OBJECT; 
+                
+                // 슬라이드 래퍼 가져오기
+                const swiperWrapper = document.getElementById('swiper-wrapper');
+
+                const slideDiv = document.createElement('div');
+                slideDiv.classList.add('swiper-slide');
+                slideDiv.dataset.pk = key;
+
+                const imgElement = document.createElement('img');
+                imgElement.src = imageUrl;
+
+                // 슬라이드에 이미지 추가
+                slideDiv.appendChild(imgElement);
+
+                // swiper-wrapper에 슬라이드 추가
+                swiperWrapper.appendChild(slideDiv);
+                const storedPk = slideDiv.dataset.pk;
+
+                slideDiv.addEventListener('click', function() {
+                    //해시 프래그먼트 사용해서 파라미터 넘김
+                    window.location.href = 'about.html#' + encodeURIComponent(JSON.stringify({key: storedPk}));
+                });
+            }
+        }
+        
+        async function init(){
+
+            // 데이터 불러와서 localStorage에 저장
+            console.log(1)
+            await fetchDataAndStoreData();
+            console.log(2)
+            // Swiper div 생성
+            createSwiper();
+            console.log(3)
+            const swiper = new Swiper(".mySwiper", {
+                effect: "slide",
+                loop: true,
+                grabCursor: true,
+                centeredSlides: true,
+                slidesPerView: 'auto',
+                spaceBetween: 10,
+                autoplay: {
+                    delay: 2000,
+                    disableOnInteraction: false
+                },
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true
+                }
+            });
+
+            document.addEventListener("DOMContentLoaded", function () {
+                swiper.autoplay.start();
+            });
+        }
+
+        //init 함수 호출
+        init();
+
+
+
+    </script>
+</body>
+
+</html>

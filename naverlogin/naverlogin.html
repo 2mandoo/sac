@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <title>네이버 로그인</title>
+    <script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js"
+        charset="utf-8"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+    <style>
+        /* 부모 요소에 Flexbox 설정 */
+        body {
+            display: flex;
+            justify-content: center;
+            /* 가로 중앙 정렬 */
+            align-items: center;
+            /* 세로 중앙 정렬 */
+            height: 100vh;
+            /* 화면 높이를 100%로 설정 */
+            margin: 0;
+            /* 기본 여백 제거 */
+        }
+
+        #naver_id_login {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 네이버 로그인 버튼 노출 영역 -->
+
+    <div id="naver_id_login"></div>
+    <!-- //네이버 로그인 버튼 노출 영역 -->
+
+    <script type="text/javascript">
+        //로그인 후 사용자를 특정 콜백 페이지로 리디렉션함
+        const currentUrl = window.location.href;  // 전체 URL
+        const parentPath = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
+
+        const YOUR_CLIENT_ID = "HiTRfW5Gbp00ltjLFZFM";
+        const YOUR_CALLBACK_URL = parentPath + "/callback.html";
+
+        console.log("check! YOUR_CALLBACK_URL:", YOUR_CALLBACK_URL);
+        
+        const naver_login = new naver_id_login(YOUR_CLIENT_ID, YOUR_CALLBACK_URL); //naver_id_login 객체를 생성
+        const state = naver_login.getUniqState(); //로그인 상태를 유지하기 위한 고유한 state 값 생성
+        naver_login.setButton("white", 1, 100);
+        naver_login.setDomain("http://127.0.0.1");
+        naver_login.setState(state);
+        //naver_login.setPopup();
+        naver_login.init_naver_id_login(); //로그인 버튼을 초기화하고, 페이지에 삽입합니다.
+        
+    </script>
+
+</html>

@@ -1,0 +1,31 @@
+/* 기본 스타일 */
+#calendarIcon {
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* 호버 상태에서의 스타일 */
+#calendarIcon:hover {
+    /* border: 2px solid #ffd9009d; */
+    /* 금색 테두리 */
+
+    /* box-shadow: 0 0 15px #FFD700, 0 0 30px #FFD700, 0 0 45px #FFD700; */
+    /* 반짝이는 효과 */
+    
+    animation: sparkle 1s infinite;
+    /* 애니메이션 추가 */
+}
+
+/* 반짝이는 애니메이션 정의 */
+@keyframes sparkle {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}

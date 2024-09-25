@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <link href="https://unpkg.com/nes.css/css/nes.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./css/style.css">
+    <!-- 실제 지도를 그리는 Javascript API를 불러오기 -->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=96244ebba269bcf1200c955d20af5861"></script>
+    <link rel="icon" href="./img/mdcon.ico">
+    <title>Seoul Art Center</title>
+    <style>
+        .title {
+            display: flex; /* Flexbox 레이아웃 적용 */
+            justify-content: center; /* 수평 중앙 정렬 (선택 사항) */
+            padding-bottom: 60px;
+        }
+
+        h1 {
+            color:#ffffff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        main {
+            color:#ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }   
+
+        /* 주소 정보 */
+
+        .location_wrap {
+            width:80%;
+            margin-bottom: 30px;
+
+            display: flex;
+            justify-content: space-between; /* 좌우로 최대한 벌리기 */
+            align-items: flex-start; /* 상단 정렬 */
+            position: relative;
+            padding: 20px;
+            margin-bottom: 20px;
+            height: 200px; /* 높이 지정 */
+        }
+
+        #addr-info {
+            padding: 20px;
+            width:80%;
+        }
+
+        #btn-wrap{
+            padding: 20px;
+            padding-bottom: 40px;
+            position: absolute;
+            right: 20px;
+            bottom: 20px; /* 오른쪽 하단 정렬 */
+        }
+
+        #addr-info p {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start; /* 텍스트 위쪽 정렬 */
+            margin-bottom: 10px; /* 항목 사이의 간격 */
+        }
+
+        #addr-info strong {
+            flex-basis: 140px; /* 제목 영역의 고정된 너비 */
+            text-align: left;
+            margin-right: 10px; /* 제목과 내용 간의 간격 */
+        }
+
+        #addr-info span {
+            flex-grow: 1; /* 내용 부분의 가변적인 너비 */
+            text-align: left;
+            padding-left: 5px;
+        }
+
+        /* 지도 */
+        .map_wrap {position:relative;overflow:hidden;width:80%;height:400px;}
+        #map-content{width:100%;height:100%;position:relative;overflow:hidden;}
+        .radius_border{border:1px solid #919191;border-radius:5px;}  
+
+        .custom_zoomcontrol {position:absolute;top:50px;right:10px;width:36px;height:80px;overflow:hidden;z-index:1;background-color:#f5f5f5;} 
+        .custom_zoomcontrol span {display:block;width:36px;height:40px;text-align:center;cursor:pointer;}     
+        .custom_zoomcontrol span img {width:15px;height:15px;border:none;margin-top:10px;}             
+        .custom_zoomcontrol span:first-child{border-bottom:1px solid #bfbfbf;}  
+    </style>
+    
+</head>
+
+<body>
+    <header>
+        <div class="logo" style="zoom: 0.8"><a href="index.html"><img src="./img/logo.png" style="width:35px;height:35px;">&nbsp;예술의 전당</a></div>    
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="program.html">Program</a></li>
+                <li><a href="board.html">Notice</a></li>
+                <li><a href="location.html">Location</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="nes-field is-inline search-bar">
+            <input type="text" id="name_field" class="nes-input" placeholder="검색" style="zoom: 0.8">
+            <span class="text-color-black">
+                <a class="nes-btn" style="zoom: 0.7">검색</a>
+            </span>
+        </div>
+    </header>
+    
+    <main>
+        <div class="title">
+            <h1>오시는 길</h1>
+        </div>
+
+        <div class="location_wrap">
+            <div id="addr-info">
+                <p><strong>| 주소 도로명</strong><span>서울시 서초구 남부순환로 2406 예술의전당 (우 06757)</span></p>
+                <p><strong>| 지번</strong><span>서울시 서초구 서초동 700번지</span></p>
+                <p><strong>| 건물명</strong><span>예술의전당(오페라하우스, 음악당, 한가람미술관, 한가람디자인미술관, 서울서예박물관)</span></p>    
+            </div>
+            <div id="btn-wrap">
+                <button type="button" class="nes-btn is-success" style="zoom: 0.8" id="findPathBtn">예술의전당 길찾기</button>
+            </div>
+        </div>
+
+        <div class="map_wrap">
+            <div id="map-content" style="width:100%;height:400px;"></div>
+            <!-- 지도 확대, 축소 컨트롤 div 입니다 -->
+            <div class="custom_zoomcontrol radius_border"> 
+                <span onclick="zoomIn()"><img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_plus.png" alt="확대"></span>  
+                <span onclick="zoomOut()"><img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_minus.png" alt="축소"></span>
+            </div>
+        <div class="map_wrap"></div>
+    </main>
+
+    <button type="button" class="nes-btn is-error scroll-btn"><span><</span></button>
+
+    <footer id="contact">
+        <p><i class="nes-icon is-small heart"></i>Contact Info<i class="nes-icon is-small heart"></i></p>
+        <a href="https://github.com/2mandoo"><i class="nes-icon github is-small"></i></a>
+        <p><i class="nes-icon google is-small"></i> dlwjdgus7441@gmail.com | <i class="nes-phone" style="zoom: 0.15;"></i> 010 9255 7441</p>
+    </footer>
+    
+    <script>
+        // 위로 버튼
+        const scrollButton = document.querySelector(".scroll-btn");
+
+        scrollButton.addEventListener("click", function() {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    </script>
+
+    <script src="./js/kakaomap.js"></script>
+</body>
+
+</html>

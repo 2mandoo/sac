@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="icon" href="./img/mdcon.ico">
+    <title>Seoul Art Center</title>
+    <style>
+        .container{
+            width:300px; height: 400px;
+            transition: all 0.1s;
+            position:relative;
+        }
+        .overlay{
+            position:absolute;
+            width: 100%; height: 100%;
+            filter:brightness(1.1) opacity(0.8);
+            mix-blend-mode: soft-light; /* 배경과 자연스럽게 섞이도록 설정 */
+            background-size: 150%, 150%;
+            background-position: 100%;
+
+        }
+        .card{
+            width: 100%; height: 100%;
+            background-size: cover;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+            border:2px solid #1e1e1e;
+        }
+        /* 갤러리 컨테이너 */
+        #gallery {
+            display: flex;
+            flex-wrap: wrap; /* 요소가 화면 너비에 맞춰 줄바꿈되도록 */
+            gap: 30px 40px; /* 요소 간의 간격  수직 간격 30px, 수평 간격 40px */
+            justify-content: center; /* 중앙 정렬 */
+            padding: 30px; /* 갤러리의 패딩 */
+            box-sizing: border-box; /* 패딩을 포함한 전체 크기 조정 */
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo" style="zoom: 0.8"><a href="index.html"><img src="./img/logo.png" style="width:35px;height:35px;">&nbsp;예술의 전당</a></div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="program.html">Program</a></li>
+                <li><a href="board.html">Notice</a></li>
+                <li><a href="location.html">Location</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="nes-field is-inline search-bar">
+            <input type="text" id="name_field" class="nes-input" placeholder="검색" style="zoom: 0.8">
+            <span class="text-color-black">
+                <a class="nes-btn" style="zoom: 0.7">검색</a>
+            </span>
+        </div>
+    </header>
+
+    <main>
+
+        <div id="gallery"></div>
+
+    </main>
+
+    <button type="button" class="nes-btn is-error scroll-btn"><span><</span></button>
+
+    <footer id="contact">
+        <p><i class="nes-icon is-small heart"></i>Contact Info<i class="nes-icon is-small heart"></i></p>
+        <a href="https://github.com/2mandoo"><i class="nes-icon github is-small"></i></a>
+        <p><i class="nes-icon google is-small"></i> dlwjdgus7441@gmail.com | <i class="nes-phone" style="zoom: 0.15;"></i> 010 9255 7441</p>
+    </footer>
+
+    <script>
+        //gallery에 새로운 container와 card를 생성, 추가
+        function createGallery() {
+        
+            const gallery = document.getElementById('gallery');
+            const allKeys = Object.keys(localStorage);
+            const mdkey = [];
+
+            // 내가 저장한 키만 가져오기
+            for(let k of allKeys){
+                if(k.startsWith('md')){
+                    mdkey.push(k);
+                }
+            }
+
+            for (let key of mdkey) {
+                const item = localStorage.getItem(key);
+                const parsedData = JSON.parse(item);
+
+                // container div 생성
+                const container = document.createElement('div');
+                container.classList.add('container');
+                container.setAttribute('data-key', key);
+
+                // overlay div 생성
+                const overlay = document.createElement('div');
+                overlay.classList.add('overlay');
+
+                // card div 생성
+                const card = document.createElement('div');
+                card.classList.add('card');
+                card.style.backgroundImage = `url(${parsedData.IMAGE_OBJECT})`;
+
+                // container에 overlay, card 추가
+                container.appendChild(overlay);
+                container.appendChild(card);
+
+                // gallery에 container 추가
+                gallery.appendChild(container);
+
+                const width = container.clientWidth;
+                const height = container.clientHeight;
+
+                container.addEventListener('mousemove', function (e) {
+                    var x = e.offsetX; // 마우스 X 좌표
+                    var y = e.offsetY; // 마우스 Y 좌표
+                    var rate = 20;
+                    var rotateX = rate * 2 / height * y - rate;
+                    var rotateY = -rate * 2 / width * x + rate;
+
+                    container.style = `transform : perspective(350px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`
+
+                    // radial-gradient의 중심을 마우스 위치로 이동
+                    overlay.style = `background: radial-gradient(circle at ${x}px ${y}px, rgba(255,255,255,0.6) 20%, rgba(144, 144, 255, 0.2) 40%, transparent 70%)`;
+                })
+                container.addEventListener('mouseout', function () {
+                    overlay.style = 'filter : opacity(0)';
+                    container.style = 'transform : perspective(350px) rotateX(0deg) rotateY(0deg)'
+                })
+
+                const storedKey = container.getAttribute('data-key');
+                container.addEventListener('click', function() {
+                    //해시 프래그먼트 사용해서 파라미터 넘김
+                    window.location.href = 'about.html#' + encodeURIComponent(JSON.stringify({key: storedKey}));
+                    
+                });
+            }
+            
+        }
+
+        createGallery();
+
+
+        // 위로 버튼
+        const scrollButton = document.querySelector(".scroll-btn");
+
+        scrollButton.addEventListener("click", function() {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    </script>
+</body>
+</html>

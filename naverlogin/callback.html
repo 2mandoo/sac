@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js"
+    charset="utf-8"></script>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+</head>
+
+<body>
+  <script type="text/javascript">
+    //토큰 받아옴
+    var naver_id_login = new naver_id_login();
+    console.log(naver_id_login.oauthParams);
+    //쿠키에 토큰 저장 (naver_access_token)
+    document.cookie = `naver_access_token=${naver_id_login.oauthParams.access_token}; path=/; max-age=${naver_id_login.oauthParams.expires_in}`;
+    //document.cookie = `naver_access_token=${naver_id_login.oauthParams.access_token}; path=/`;
+    //alert(naver_id_login.oauthParams.access_token)
+    alert('로그인 성공! 일정추가버튼을 다시 누르세요.');
+    window.close();
+  </script>
+</body>
+
+</html>
