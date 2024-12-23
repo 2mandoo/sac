@@ -1,4 +1,8 @@
 # Concert Info & Booking Assistant 🎵
+![js](https://camo.githubusercontent.com/a2ae02fdd923f100feb94c31e7bc898e97a5ed4381172863f9d3ad03b49d178e/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4a6176615363726970742d4637444631453f7374796c653d666c6174266c6f676f3d4a617661736372697074266c6f676f436f6c6f723d7768697465)
+![html5](https://camo.githubusercontent.com/cf68bb496b501a6324af5e0a1b6f1853c02a8bfc6b06fd96b8fa9b5d842358f7/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f68746d6c352d4533344632363f7374796c653d666c6174266c6f676f3d68746d6c35266c6f676f436f6c6f723d7768697465)
+![css](https://img.shields.io/badge/css3-%231572B6.svg?style=flat&logo=css3&logoColor=white)
+
 Open API를 활용하여 연주회 정보와 예매 데이터를 시각화하여 예매 의사결정을 돕는 웹페이지입니다.
 
 또한, 네이버 캘린더 API를 연동하여 관심 있는 연주회를 캘린더에 쉽게 저장할 수 있습니다
